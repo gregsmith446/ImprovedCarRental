@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Car Rental</title>
+</head>
+<body>
+
+<h1 id="bizName"></h1>    
+
+<form name="carSelection" onsubmit="return makeReserv()">
+    Renter Name:
+    <input type="text" name="name" id="renter">
+    Car Type
+    <select onchange="displayInfo(this.value)" name="type" id="type">
+        <option disabled hidden="" selected value="none">Select Vehicle</option>
+        <option value="Economy">Economy</option>
+        <option value="SUV">SUV</option>
+    </select>
+</form>
+    <br>
+    <br>
+    <button type="submit" value="submit">Reserve Selected Car</button>
+    
+    <h2 id="displayInfo"></h2>
+
+<script>
+
+//object for car type, price, and amount
+var carInfo = {
+    busName: "Grego's Rent-A-Car",
+    Economy: {
+        price: 60,
+        available: 15
+    },
+    SUV: {
+        price: 100,
+        available: 10
+    },
+};
+
+//this stores the person who rented in the array of the car type they chose.
+var renterData = {
+        Economy: [],
+        SUV: []
+};
+
+//this shows the business name in the h1 tag when the webpage loads
+window.onload = function() {
+    document.getElementById("bizName").innerHTML = carInfo.busName
+};
+
+//displays price and availability on screen if car type is selectd in the dropdown
+function displayInfo(val){
+    var selection = carInfo[val];
+    document.getElementById("displayInfo").innerHTML = val + " $" + selection.price + "<br>" + "Number Currently Available " + selection.available ;
+}
+
+//this function has 2 purposes: 
+function makeReserv(){
+	       // It assigns the values from the Name field and Type slected
+	       var type = document.forms["carSelection"]["type"].value;
+	       var renterName = document.forms["carSelection"]["name"].value;
+	       // And Form Validation using an else if statement - Prevents form submission is form is incomplete - triggers an alert message
+	       if(type == "none"){
+	           alert("Please choose a car type");
+	       }
+	       else if(renterName ==""){
+	           alert("Please enter your first and last name");
+	       } else { 
+	       //if form is completed correctly, the renter's name is pushed to an array,
+	       //based on the type of car rented.  A person selecting SUV will have their name added 
+	       //to the SUV array, renterData.Economy at the end.
+	           renterData[type].push({name: renterName})
+	           // carRental object
+	           carInfo[type].available--; 
+	           document.getElementById('displayInfo').innerHTML = "Your reservation was successful!"
+	       }
+	       return false;
+	   }
+</script>
+</body>
+</html>
+
